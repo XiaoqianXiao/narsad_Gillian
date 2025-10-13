@@ -1,5 +1,5 @@
 Bootstrap: localimage
-From: narsad-fmri_1st_level_0.0.sif
+From: /mmfs1/home/xxqian/repos/images/narsad-fmri_1st_level_0.0.sif
 
 %environment
     export DEBIAN_FRONTEND=noninteractive
