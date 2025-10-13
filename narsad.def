@@ -10,9 +10,8 @@ From: /mmfs1/home/xxqian/repos/images/narsad-fmri_1st_level_0.0.sif
     export MPLBACKEND=Agg  # safe for headless plotting in Apptainer
 
 %files
-    first_level_workflows.py /app/first_level_workflows.py
-    create_1st_voxelWise.py /app/create_1st_voxelWise.py
-    run_pre_group_voxelWise.py /app/run_pre_group_voxelWise.py
+    S1_create_ROIs.py /app/S1_create_ROIs.py
+    S2_1st_level.py /app/S2_1st_level.py
 
 %post
     # Ensure environment
@@ -35,18 +34,17 @@ From: /mmfs1/home/xxqian/repos/images/narsad-fmri_1st_level_0.0.sif
         joblib
 
     # Make scripts executable
-    chmod +x /app/first_level_workflows.py
-    chmod +x /app/create_1st_voxelWise.py
-    chmod +x /app/run_pre_group_voxelWise.py
+    chmod +x /app/S1_create_ROIs.py
+    chmod +x /app/S2_1st_level.py
 
 %runscript
     #!/bin/bash
     CMD="$1"; shift || true
     case "$CMD" in
       standard)
-        exec python3 /app/create_1st_voxelWise.py "$@" ;;
+        exec python3 /app/S1_create_ROIs.py "$@" ;;
       single_trial)
-        exec python3 /app/run_pre_group_voxelWise.py "$@" ;;
+        exec python3 /app/S2_1st_level.py "$@" ;;
       *)
         echo "Usage: $(basename $0) {standard|single_trial} [args...]" >&2
         exit 1
