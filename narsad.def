@@ -1,0 +1,54 @@
+Bootstrap: localimage
+From: narsad-fmri_1st_level_0.0.sif
+
+%environment
+    export DEBIAN_FRONTEND=noninteractive
+    export FSLDIR=/usr/local/fsl
+    export PATH=${FSLDIR}/bin:$PATH
+    export FSLOUTPUTTYPE=NIFTI_GZ
+    export PYTHONUNBUFFERED=1
+    export MPLBACKEND=Agg  # safe for headless plotting in Apptainer
+
+%files
+    first_level_workflows.py /app/first_level_workflows.py
+    create_1st_voxelWise.py /app/create_1st_voxelWise.py
+    run_pre_group_voxelWise.py /app/run_pre_group_voxelWise.py
+
+%post
+    # Ensure environment
+    export DEBIAN_FRONTEND=noninteractive
+
+    # Update pip and install missing Python dependencies
+    pip3 install --upgrade pip
+    pip3 install \
+        numpy \
+        pandas \
+        bids \
+        nipype \
+        templateflow \
+        nilearn \
+        nibabel \
+        nltools \
+        matplotlib \
+        seaborn \
+        scikit-learn \
+        joblib
+
+    # Make scripts executable
+    chmod +x /app/first_level_workflows.py
+    chmod +x /app/create_1st_voxelWise.py
+    chmod +x /app/run_pre_group_voxelWise.py
+
+%runscript
+    #!/bin/bash
+    CMD="$1"; shift || true
+    case "$CMD" in
+      standard)
+        exec python3 /app/create_1st_voxelWise.py "$@" ;;
+      single_trial)
+        exec python3 /app/run_pre_group_voxelWise.py "$@" ;;
+      *)
+        echo "Usage: $(basename $0) {standard|single_trial} [args...]" >&2
+        exit 1
+        ;;
+    esac
