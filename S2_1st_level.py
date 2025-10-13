@@ -108,7 +108,7 @@ subjects = layout.get_subjects()
 
 # %%
 # can load in onsets (events.tsv) for all subs here as all subs have same task timings 
-onsets_phase2 = pd.read_excel('//gscratch/fang/NARSAD/MRI/source_data/behav/task-Narsad_events.xlsx',sheet_name=0)
+onsets_phase2 = pd.read_excel('/gscratch/fang/NARSAD/MRI/source_data/behav/task-Narsad_events.xlsx',sheet_name=0)
 onsets_phase3 = pd.read_excel('/gscratch/fang/NARSAD/MRI/source_data/behav/task-Narsad_events.xlsx',sheet_name=1)
 onsets_phase3_sub202 = pd.read_excel('/gscratch/fang/NARSAD/MRI/source_data/behav/task-Narsad_events.xlsx',sheet_name=2)
 
