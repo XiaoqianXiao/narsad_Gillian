@@ -31,7 +31,8 @@ From: /mmfs1/home/xxqian/repos/images/narsad-fmri_1st_level_0.0.sif
         matplotlib \
         seaborn \
         scikit-learn \
-        joblib
+        joblib \
+        openpyxl
 
     # Make scripts executable
     chmod +x /app/S1_create_ROIs.py
