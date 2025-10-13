@@ -118,6 +118,7 @@ onsets_sub202 = onsets_phase2, onsets_phase3_sub202
 def load_bids_events(layout,onsets, subject, task, phaseno):
     '''Create a design_matrix instance from BIDS event file'''
     
+    print(subject, task)
     tr = layout.get_tr(subject=subject, task=task)
     # change lines below -- can change to "mask", change task to "self-other"
     func_files = layout.get(subject=subject,
