@@ -223,15 +223,16 @@ for phaseno, task in enumerate(tasks):
                            extension="tsv",
                            return_type='file')
         # Select confounds 
-        confound_vars = ['trans_x','trans_x_derivative1','trans_x_derivative1_power2','trans_x_power2',
-                           'trans_y','trans_y_derivative1','trans_y_derivative1_power2','trans_y_power2',
-                             'trans_z','trans_z_derivative1','trans_z_derivative1_power2','trans_z_power2',
-                             'rot_x','rot_x_derivative1','rot_x_derivative1_power2','rot_x_power2',
-                             'rot_y','rot_y_derivative1','rot_y_derivative1_power2','rot_y_power2',
-                             'rot_z','rot_z_derivative1','rot_z_derivative1_power2','rot_z_power2',
-                             'csf','csf_derivative1','csf_derivative1_power2','csf_power2',
-                             'white_matter','white_matter_derivative1','white_matter_derivative1_power2','white_matter_power2'
-                        ]
+        confound_vars = [
+            'trans_x', 'trans_y', 'trans_z', 'rot_x', 'rot_y', 'rot_z',
+            'trans_x_derivative1', 'trans_y_derivative1', 'trans_z_derivative1',
+            'rot_x_derivative1', 'rot_y_derivative1', 'rot_z_derivative1',
+            'trans_x_power2', 'trans_y_power2', 'trans_z_power2',
+            'rot_x_power2', 'rot_y_power2', 'rot_z_power2',
+            'trans_x_derivative1_power2', 'trans_y_derivative1_power2', 'trans_z_derivative1_power2',
+            'rot_x_derivative1_power2', 'rot_y_derivative1_power2', 'rot_z_derivative1_power2',
+            'csf', 'white_matter'
+        ]
 
         final_confounds = confound_vars
 
@@ -251,6 +252,25 @@ for phaseno, task in enumerate(tasks):
             frame_times = np.arange(n_scans) * tr
             confound_file = confound_files[0]
             confound_df = pd.read_csv(confound_file, delimiter='\t')
+            confound_vars_existing = [v for v in confound_vars if v in confound_df.columns]
+            confound_df = confound_df[confound_vars_existing].fillna(0)
+            fd_threshold = 0.5
+            if 'framewise_displacement' in confound_df.columns or 'framewise_displacement' in confound_file:
+                # read from file again if FD column missing
+                full_confounds = pd.read_csv(confound_file, delimiter='\t')
+                if 'framewise_displacement' in full_confounds.columns:
+                    high_fd_idx = full_confounds.index[full_confounds['framewise_displacement'] > fd_threshold]
+                    if len(high_fd_idx) > 0:
+                        scrub_matrix = np.zeros((len(full_confounds), len(high_fd_idx)))
+                        scrub_matrix[high_fd_idx, np.arange(len(high_fd_idx))] = 1
+                        scrub_cols = pd.DataFrame(
+                            scrub_matrix,
+                            columns=[f'scrub_FD{i:03d}' for i in range(len(high_fd_idx))]
+                        )
+                        # Align scrub regressors with confounds rows
+                        confound_df = pd.concat([confound_df.reset_index(drop=True), scrub_cols], axis=1)
+                        confound_vars_existing += scrub_cols.columns.tolist()
+            
             confound_df = confound_df[final_confounds]
             confound_df.fillna(0, inplace=True)            
         # Build design matrix with the previously defined parameters
@@ -318,7 +338,7 @@ regions_of_interest = [
 ]
 
 # Create an Excel writer object
-output_dir = "/gscratch/scrubbed/fanglab/xiaoqian/NARSAD/ROI/Gillian/first_level"
+output_dir = "/gscratch/scrubbed/fanglab/xiaoqian/NARSAD/ROI/Gillian/first_level_2"
 os.makedirs(output_dir, exist_ok=True)  # Create directory if it doesn't exist
 
 output_path = os.path.join(output_dir, "phase2_data-new.xlsx")
