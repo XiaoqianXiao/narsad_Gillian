@@ -390,5 +390,52 @@ with pd.ExcelWriter(output_path) as writer:
 
 print("Excel file with z-scores saved successfully!")
 
+# %%
+# === Export combined Phase 2 and Phase 3 z-scores in long-format CSV ===
 
+import os
+import pandas as pd
+import numpy as np
+
+# Define regions of interest
+regions_of_interest = ['Amygdala', 'Insula', 'Hippocampus', 'ACC', 'VMPFC']
+
+# Define output directory and file path
+output_dir = "/gscratch/scrubbed/fanglab/xiaoqian/NARSAD/ROI/Gillian"
+os.makedirs(output_dir, exist_ok=True)
+output_csv = os.path.join(output_dir, "first_level_2.csv")
+
+# Initialize list to collect all data
+all_rows = []
+
+# Helper function to extract and append data
+def collect_data(file_lists, sub_orders, task_label):
+    for contrast, contrast_list in file_lists.items():
+        for i, subject_contrast in enumerate(contrast_list):
+            z_scores = subject_contrast.z_score()
+            subject_id = sub_orders[contrast][i] if i < len(sub_orders[contrast]) else f"unknown_{i}"
+
+            # For each ROI, add a row
+            for region_no, region in enumerate(regions_of_interest):
+                all_rows.append({
+                    "ROI": region,
+                    "Subject": subject_id,
+                    "Task": task_label,
+                    "Contrast": contrast,
+                    "Z_score": z_scores[region_no]
+                })
+
+# Collect phase 2 and phase 3 data
+collect_data(file_lists_phase2, sub_order_phase2, "phase2")
+collect_data(file_lists_phase3, sub_order_phase3, "phase3")
+
+# Create a combined DataFrame
+df_all = pd.DataFrame(all_rows, columns=["ROI", "Subject", "Task", "Contrast", "Z_score"])
+
+# Save as CSV
+df_all.to_csv(output_csv, index=False)
+
+print(f"✅ Combined first-level z-scores saved successfully:\n{output_csv}")
+print(f"Total rows: {len(df_all)}")
+print(df_all.head())
 
