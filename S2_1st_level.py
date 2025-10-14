@@ -119,7 +119,17 @@ def load_bids_events(layout,onsets, subject, task, phaseno):
     '''Create a design_matrix instance from BIDS event file'''
     
     print(subject, task)
-    tr = layout.get_tr(subject=subject, task=task)
+    #tr = layout.get_tr(subject=subject, task=task)
+    json_files = layout.get(subject=subject, task=task, desc='preproc', suffix='bold',
+                        extension='.json', return_type='file')
+    if not json_files:
+        raise FileNotFoundError(f"No JSON metadata found for {subject}, {task}")
+    import json
+    with open(json_files[0], 'r') as f:
+        metadata = json.load(f)
+    tr = metadata.get("RepetitionTime", None)
+    if tr is None:
+        raise ValueError(f"No RepetitionTime found in {json_files[0]}")
     # change lines below -- can change to "mask", change task to "self-other"
     func_files = layout.get(subject=subject,
                         datatype='func', task=task,
