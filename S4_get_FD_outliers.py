@@ -1,0 +1,68 @@
+import os
+import pandas as pd
+import numpy as np
+from bids import BIDSLayout
+
+# Initialize BIDS layout
+layout = bids.BIDSLayout('/gscratch/fang/NARSAD/MRI/derivatives/fmriprep', validate=False,
+                         config=['bids', 'derivatives'])
+
+# Output file
+output_csv = "/gscratch/scrubbed/fanglab/xiaoqian/NARSAD/ROI/FD.csv"
+os.makedirs(os.path.dirname(output_csv), exist_ok=True)
+
+# Prepare DataFrame to store results
+fd_summary = []
+
+# List of tasks (phases)
+tasks = ['phase2', 'phase3']
+fd_threshold = 0.5
+
+for task in tasks:
+    subjects = layout.get_subjects()
+    for sub in subjects:
+        # Get confounds file
+        confound_files = layout.get(
+            subject=sub,
+            datatype='func',
+            task=task,
+            desc='confounds',
+            extension='tsv',
+            return_type='file'
+        )
+        if not confound_files:
+            continue  # Skip if no confound file found
+        
+        # Read confound file
+        confound_file = confound_files[0]
+        df_conf = pd.read_csv(confound_file, sep='\t')
+        if 'framewise_displacement' not in df_conf.columns:
+            print(f"No FD column found for sub-{sub}, task-{task}")
+            continue
+
+        # Compute FD > 0.5 stats
+        n_scans = len(df_conf)
+        n_high_fd = np.sum(df_conf['framewise_displacement'] > fd_threshold)
+        perc_high_fd = (n_high_fd / n_scans) * 100 if n_scans > 0 else np.nan
+        mean_fd = df_conf['framewise_displacement'].mean()
+        max_fd = df_conf['framewise_displacement'].max()
+
+        # Append to results
+        fd_summary.append({
+            "subject": sub,
+            "task": task,
+            "n_scans": n_scans,
+            "FD>0.5_count": n_high_fd,
+            "FD>0.5_%": round(perc_high_fd, 2),
+            "mean_FD": round(mean_fd, 4),
+            "max_FD": round(max_fd, 4)
+        })
+
+# Convert to DataFrame
+fd_df = pd.DataFrame(fd_summary)
+
+# Save to CSV
+fd_df.to_csv(output_csv, index=False)
+
+print(f"FD summary saved to {output_csv}")
+print(fd_df.head())
