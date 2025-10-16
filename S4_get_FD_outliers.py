@@ -1,7 +1,37 @@
 import os
-import pandas as pd
+import glob
 import numpy as np
-from bids import BIDSLayout
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import nibabel as nib
+from nilearn import image as nimg
+from nilearn import plotting as nplot
+import bids
+from nltools.file_reader import onsets_to_dm
+from nltools.stats import regress, zscore
+from nltools.data import Brain_Data, Design_Matrix
+from nltools.stats import find_spikes 
+from nilearn.plotting import view_img, glass_brain, plot_stat_map
+from bids import BIDSLayout, BIDSValidator
+import os
+from pathlib import Path
+from nilearn.glm.first_level import make_first_level_design_matrix
+from nilearn.plotting import plot_design_matrix
+from nilearn.glm.first_level import FirstLevelModel
+from nilearn import plotting
+from nilearn.plotting import plot_contrast_matrix
+from nilearn.glm.first_level import FirstLevelModel
+from nilearn import plotting
+# creating mean img for plotting purposes 
+from nilearn.image import mean_img
+from nilearn.image import load_img
+from nibabel import load
+from nibabel.gifti import GiftiDataArray, GiftiImage
+from nilearn.glm.first_level import run_glm as run_glm
+from nilearn.glm import compute_contrast
+import nilearn
+fsaverage = nilearn.datasets.fetch_surf_fsaverage(mesh='fsaverage5')
 
 # Initialize BIDS layout
 layout = bids.BIDSLayout('/gscratch/fang/NARSAD/MRI/derivatives/fmriprep', validate=False,
