@@ -331,14 +331,22 @@ for phaseno, task in enumerate(tasks):
             column: contrast_matrix[i]
             for i, column in enumerate(design_matrix.columns)
         }
-        
         contrasts = {
-            "CSR-CSS": (basic_contrasts["CSR"] - basic_contrasts["CSS"]),   
-            "CSR-CS-": (basic_contrasts["CSR"] - basic_contrasts["CS-"]),   
-            "CSS-CS-": (basic_contrasts["CSS"] - basic_contrasts["CS-"]),
-            "CSR-fix": (basic_contrasts["CSR"] - basic_contrasts["FIXATION"]), 
-            "CSS-fix": (basic_contrasts["CSS"] - basic_contrasts["FIXATION"]),
-            "CSminus-fix": (basic_contrasts["CS-"] - basic_contrasts["FIXATION"])
+            "early_CSR-early_CSS": (basic_contrasts["early_CSR"] - basic_contrasts["early_CSS"]),   
+            "early_CSR-early_CS-": (basic_contrasts["early_CSR"] - basic_contrasts["early_CS-"]),   
+            "early_CSS-early_CS-": (basic_contrasts["early_CSS"] - basic_contrasts["early_CS-"]),
+            "early_CSR-early_fix": (basic_contrasts["early_CSR"] - basic_contrasts["early_FIXATION"]), 
+            "early_CSS-early_fix": (basic_contrasts["early_CSS"] - basic_contrasts["early_FIXATION"]),
+            "early_CSminus-early_fix": (basic_contrasts["early_CS-"] - basic_contrasts["early_FIXATION"]),
+            "late_CSR-late_CSS": (basic_contrasts["late_CSR"] - basic_contrasts["late_CSS"]),   
+            "late_CSR-late_CS-": (basic_contrasts["late_CSR"] - basic_contrasts["late_CS-"]),   
+            "late_CSS-late_CS-": (basic_contrasts["late_CSS"] - basic_contrasts["late_CS-"]),
+            "late_CSR-late_fix": (basic_contrasts["late_CSR"] - basic_contrasts["late_FIXATION"]), 
+            "late_CSS-late_fix": (basic_contrasts["late_CSS"] - basic_contrasts["late_FIXATION"]),
+            "late_CSminus-late_fix": (basic_contrasts["late_CS-"] - basic_contrasts["late_FIXATION"]),
+            "early_CSR-early_CSS-late_CSS+late_CS-": (basic_contrasts["early_CSR"] - basic_contrasts["early_CSS"] - basic_contrasts["late_CSR"] + basic_contrasts["late_CSS"]),   
+            "early_CSR-early_CS--late_CSR+late_CS-": (basic_contrasts["early_CSR"] - basic_contrasts["early_CS-"] - basic_contrasts["late_CSR"] + basic_contrasts["late_CS-"]),   
+            "early_CSS-early_CS-": (basic_contrasts["early_CSS"] - basic_contrasts["early_CS-"] - basic_contrasts["late_CSS"] + basic_contrasts["late_CS-"])
         }
 
     #fmri_glm = FirstLevelModel()
