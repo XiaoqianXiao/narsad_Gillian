@@ -157,39 +157,75 @@ from scipy.stats import norm
 p001_unc = norm.isf(0.001)
 
 file_lists_phase2 = {
-        "CSR-CSS": list(),   
-        "CSR-CS-": list(),
-        "CSS-CS-": list(),
-        "CSR-fix": list(), 
-        "CSS-fix": list(),   
-        "CSminus-fix": list()
+        "early_CSR-early_CSS": list(),   
+        "early_CSR-early_CS-": list(),
+        "early_CSS-early_CS-": list(),
+        "early_CSR-early_fix": list(), 
+        "early_CSS-early_fix": list(),   
+        "early_CSminus-early_fix": list(),
+        "late_CSR-late_CSS": list(),   
+        "late_CSR-late_CS-": list(),
+        "late_CSS-late_CS-": list(),
+        "late_CSR-late_fix": list(), 
+        "late_CSS-late_fix": list(),   
+        "late_CSminus-late_fix": list(),
+        "early_CSR-early_CSS-late_CSR+late_CSS": list(),
+        "early_CSR-early_CS--late_CSR+late_CS-": list(),
+        "early_CSS-early_CS--late_CSS+late_CS-": list()
         }
 
 file_lists_phase3 = {
-        "CSR-CSS": list(),   
-        "CSR-CS-": list(),
-        "CSS-CS-": list(),
-        "CSR-fix": list(), 
-        "CSS-fix": list(),   
-        "CSminus-fix": list()
+        "early_CSR-early_CSS": list(),   
+        "early_CSR-early_CS-": list(),
+        "early_CSS-early_CS-": list(),
+        "early_CSR-early_fix": list(), 
+        "early_CSS-early_fix": list(),   
+        "early_CSminus-early_fix": list(),
+        "late_CSR-late_CSS": list(),   
+        "late_CSR-late_CS-": list(),
+        "late_CSS-late_CS-": list(),
+        "late_CSR-late_fix": list(), 
+        "late_CSS-late_fix": list(),   
+        "late_CSminus-late_fix": list(),
+        "early_CSR-early_CSS-late_CSR+late_CSS": list(),
+        "early_CSR-early_CS--late_CSR+late_CS-": list(),
+        "early_CSS-early_CS--late_CSS+late_CS-": list()
         }
 
 sub_order_phase2 = {
-        "CSR-CSS": list(),   
-        "CSR-CS-": list(),
-        "CSS-CS-": list(),
-        "CSR-fix": list(), 
-        "CSS-fix": list(),   
-        "CSminus-fix": list()
+        "early_CSR-early_CSS": list(),   
+        "early_CSR-early_CS-": list(),
+        "early_CSS-early_CS-": list(),
+        "early_CSR-early_fix": list(), 
+        "early_CSS-early_fix": list(),   
+        "early_CSminus-early_fix": list(),
+        "late_CSR-late_CSS": list(),   
+        "late_CSR-late_CS-": list(),
+        "late_CSS-late_CS-": list(),
+        "late_CSR-late_fix": list(), 
+        "late_CSS-late_fix": list(),   
+        "late_CSminus-late_fix": list(),
+        "early_CSR-early_CSS-late_CSR+late_CSS": list(),
+        "early_CSR-early_CS--late_CSR+late_CS-": list(),
+        "early_CSS-early_CS--late_CSS+late_CS-": list()
         }
 
 sub_order_phase3 = {
-        "CSR-CSS": list(),   
-        "CSR-CS-": list(),
-        "CSS-CS-": list(),
-        "CSR-fix": list(), 
-        "CSS-fix": list(),   
-        "CSminus-fix": list()
+        "early_CSR-early_CSS": list(),   
+        "early_CSR-early_CS-": list(),
+        "early_CSS-early_CS-": list(),
+        "early_CSR-early_fix": list(), 
+        "early_CSS-early_fix": list(),   
+        "early_CSminus-early_fix": list(),
+        "late_CSR-late_CSS": list(),   
+        "late_CSR-late_CS-": list(),
+        "late_CSS-late_CS-": list(),
+        "late_CSR-late_fix": list(), 
+        "late_CSS-late_fix": list(),   
+        "late_CSminus-late_fix": list(),
+        "early_CSR-early_CSS-late_CSR+late_CSS": list(),
+        "early_CSR-early_CS--late_CSR+late_CS-": list(),
+        "early_CSS-early_CS--late_CSS+late_CS-": list()
         }
 
 tasks = ['phase2','phase3']
